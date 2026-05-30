@@ -6,39 +6,36 @@ void main() async {
   // Garante a inicialização dos bindings do Flutter
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Inicializa o armazenamento local (Hive)
+  // Inicializa o Firebase
   await DatabaseService.init();
 
-  runApp(const MeuEstoqueApp());
+  runApp(const ChurrasControlApp());
 }
 
-class MeuEstoqueApp extends StatelessWidget {
-  const MeuEstoqueApp({super.key});
+class ChurrasControlApp extends StatelessWidget {
+  const ChurrasControlApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Gerenciador de Estoque',
+      title: 'ChurrasControl 🥩',
       debugShowCheckedModeBanner: false,
 
-      // Configuração do Tema Visual do Aplicativo
+      // Configuração do Tema Visual para Churrasco (Tons de Vermelho e Brasa)
       theme: ThemeData(
         useMaterial3: true,
-        // Define uma cor semente (Rosa/Vinho elegante para o segmento de lingerie)
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFD81B60),
+          seedColor: const Color(0xFFB71C1C), // Vermelho Escuro
           brightness: Brightness.light,
         ),
-        // Customização padrão para as barras de navegação do app
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFD81B60),
+          backgroundColor: Color(0xFFB71C1C),
           foregroundColor: Colors.white,
           centerTitle: true,
           elevation: 2,
         ),
       ),
 
-      // Define a tela inicial do aplicativo
       home: const HomeScreen(),
     );
   }

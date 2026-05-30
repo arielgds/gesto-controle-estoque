@@ -1,60 +1,56 @@
 class ProdutoModel {
-  final String? id; // O ID pode ser nulo antes de ser salvo no banco
+  final String? id;
   final String nome;
-  final String tamanho; // Ex: P, M, G, GG, 42, 44
-  final String cor; // Ex: Preto, Vermelho, Romance
-  final int quantidade;
+  final String unidadeMedida; // Ex: Kg, g, Unidade, Saco
+  final String categoria; // Ex: Carne, Bebida, Acompanhamento
+  final double quantidade; // Mudamos para double para suportar 1.5kg
   final double precoVenda;
 
   ProdutoModel({
     this.id,
     required this.nome,
-    required this.tamanho,
-    required this.cor,
+    required this.unidadeMedida,
+    required this.categoria,
     required this.quantidade,
     required this.precoVenda,
   });
 
-  // Método auxiliar para criar uma cópia do produto alterando apenas alguns dados
-  // Muito útil para quando formos dar "+" ou "-" na quantidade do estoque
   ProdutoModel copyWith({
     String? id,
     String? nome,
-    String? tamanho,
-    String? cor,
-    int? quantidade,
+    String? unidadeMedida,
+    String? categoria,
+    double? quantidade,
     double? precoVenda,
   }) {
     return ProdutoModel(
       id: id ?? this.id,
       nome: nome ?? this.nome,
-      tamanho: tamanho ?? this.tamanho,
-      cor: cor ?? this.cor,
+      unidadeMedida: unidadeMedida ?? this.unidadeMedida,
+      categoria: categoria ?? this.categoria,
       quantidade: quantidade ?? this.quantidade,
       precoVenda: precoVenda ?? this.precoVenda,
     );
   }
 
-  // CONVERSÃO: Transforma o Objeto do código em um Mapa (JSON) para salvar no celular
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'nome': nome,
-      'tamanho': tamanho,
-      'cor': cor,
+      'unidadeMedida': unidadeMedida,
+      'categoria': categoria,
       'quantidade': quantidade,
       'precoVenda': precoVenda,
     };
   }
 
-  // CONVERSÃO: Pega o Mapa (JSON) do armazenamento local e reconstrói o Objeto no Flutter
   factory ProdutoModel.fromMap(Map<String, dynamic> map) {
     return ProdutoModel(
       id: map['id'] as String?,
       nome: map['nome'] as String,
-      tamanho: map['tamanho'] as String,
-      cor: map['cor'] as String,
-      quantidade: map['quantidade'] as int,
+      unidadeMedida: map['unidadeMedida'] as String,
+      categoria: map['categoria'] as String,
+      quantidade: (map['quantidade'] as num).toDouble(),
       precoVenda: (map['precoVenda'] as num).toDouble(),
     );
   }

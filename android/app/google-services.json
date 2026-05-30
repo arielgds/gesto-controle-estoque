@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1090663199673",
+    "project_id": "estoqueapp-69666034",
+    "storage_bucket": "estoqueapp-69666034.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090663199673:android:ed21398eb6160ab8dcfc68",
+        "android_client_info": {
+          "package_name": "com.example.statefulclickcounter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2DoDmYFw7C9fBKCyXIKDWnS0-uJxAwnU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

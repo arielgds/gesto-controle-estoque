@@ -1,41 +1,54 @@
-
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../models/produto_model.dart';
 
 class DatabaseService {
-  static const String _boxName = 'estoque_box';
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
+  static const String _collectionName = 'produtos';
 
-  // Inicializa o Hive (será chamado no main.dart)
+  // Inicializa o Firebase (será chamado no main.dart)
   static Future<void> init() async {
-    await Hive.initFlutter();
-    await Hive.openBox(_boxName);
+    await Firebase.initializeApp();
   }
 
-  // 1. SALVAR / ADICIONAR PRODUTO
+  // 1. SALVAR / ADICIONAR / EDITAR PRODUTO
   static Future<void> salvarProduto(ProdutoModel novoProduto) async {
-    var box = Hive.box(_boxName);
+    // Se o produto já tem ID, usamos ele (Edição). Se não, criamos um novo (Cadastro).
+    String idFinal = novoProduto.id ?? _db.collection(_collectionName).doc().id;
     
-    // Gera um ID se não existir
-    String idFinal = novoProduto.id ?? DateTime.now().millisecondsSinceEpoch.toString();
     ProdutoModel produtoParaSalvar = novoProduto.copyWith(id: idFinal);
 
-    // Salva no Hive usando o ID como chave
-    await box.put(idFinal, produtoParaSalvar.toMap());
+    // Salva no Firestore usando o ID como documento
+    await _db.collection(_collectionName).doc(idFinal).set(produtoParaSalvar.toMap());
   }
 
   // 2. BUSCAR TODOS OS PRODUTOS
   static Future<List<ProdutoModel>> buscarProdutos() async {
-    var box = Hive.box(_boxName);
-    
-    // Converte os Mapas salvos de volta para objetos ProdutoModel
-    return box.values.map((item) {
-      return ProdutoModel.fromMap(Map<String, dynamic>.from(item));
-    }).toList();
+    try {
+      QuerySnapshot snapshot = await _db.collection(_collectionName).get();
+      
+      // Converte os documentos do Firestore de volta para objetos ProdutoModel
+      return snapshot.docs.map((doc) {
+        return ProdutoModel.fromMap(Map<String, dynamic>.from(doc.data() as Map));
+      }).toList();
+    } catch (e) {
+      print("Erro ao buscar produtos: $e");
+      return [];
+    }
   }
 
   // 3. EXCLUIR PRODUTO
   static Future<void> excluirProduto(String id) async {
-    var box = Hive.box(_boxName);
-    await box.delete(id);
+    await _db.collection(_collectionName).doc(id).delete();
+  }
+
+  // 4. (EXTRA) STREAM PARA ATUALIZAÇÃO EM TEMPO REAL
+  // Se quiser usar StreamBuilder no futuro para a lista atualizar sozinha
+  static Stream<List<ProdutoModel>> streamProdutos() {
+    return _db.collection(_collectionName).snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return ProdutoModel.fromMap(Map<String, dynamic>.from(doc.data() as Map));
+      }).toList();
+    });
   }
 }
