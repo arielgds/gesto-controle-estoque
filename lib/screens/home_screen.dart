@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _totalPecas = 0;
+  double _totalPecas = 0;
   int _estoqueBaixo = 0;
 
   @override
@@ -22,8 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _carregarResumo() async {
-    final produtos = await DatabaseService.buscarProdutos();
-    int total = 0;
+    final List<ProdutoModel> produtos = await DatabaseService.buscarProdutos();
+    double total = 0;
     int baixo = 0;
 
     for (var p in produtos) {
@@ -70,7 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisSpacing: 16,
               children: [
                 _buildDashboardCard(
-                    'Total Peças', '$_totalPecas', Icons.inventory_2, Colors.blue),
+                    'Total Peças', 
+                    _totalPecas % 1 == 0 ? _totalPecas.toInt().toString() : _totalPecas.toStringAsFixed(1), 
+                    Icons.inventory_2, 
+                    Colors.blue),
                 _buildDashboardCard('Estoque Baixo', '$_estoqueBaixo',
                     Icons.warning_amber_rounded, Colors.orange),
               ],

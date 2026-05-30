@@ -71,4 +71,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'estoqueapp-69666034.firebasestorage.app',
     iosBundleId: 'com.example.clickCounter',
   );
+
 }
