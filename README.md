@@ -28,6 +28,3 @@ O **ChurrasControl** é um aplicativo móvel desenvolvido com Flutter projetado 
 2. Configure o Firebase rodando `flutterfire configure`.
 3. Execute `flutter pub get`.
 4. Rode o app com `flutter run`.
-
----
-Desenvolvido como uma evolução do projeto Gesto para controle de insumos de alimentos.
